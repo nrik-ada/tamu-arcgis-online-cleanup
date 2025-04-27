@@ -4,30 +4,30 @@ import pandas as pd
 import getpass
 
 # Connect to ArcGIS Online
-gis =  GIS("Home")
-ogr_id = gis.properties.id
+gis = GIS("home")
+org_id = gis.properties.id
 executor = gis.users.me.username if gis.users.me else getpass.getuser()
-print(f"Connected to orginization: {gis.properties.name} as {executor}")
+print(f"Connected to organization: {gis.properties.name} as {executor}")
 
-# Configiuration
+# Configuration
 YEARS_UNVIEWED = 1 
 YEARS_INACTIVE = 4
 YEARS_UNMODIFIED = 8
 TODAY = datetime.now()
 CUTOFF_VIEWED = TODAY - timedelta(days=YEARS_UNVIEWED * 365)
-CUTOFF_LOGIN = TODAY - timedelta(days = YEARS_INACTIVE * 365)
-CUTOFF_MODIFIED = TODAY - timedelta(days = YEARS_UNMODIFIED * 365)
+CUTOFF_LOGIN = TODAY - timedelta(days=YEARS_INACTIVE * 365)
+CUTOFF_MODIFIED = TODAY - timedelta(days=YEARS_UNMODIFIED * 365)
 TIMESTAMP = TODAY.strftime('%Y%m%d_%H%M%S')
 
-# Step 1: Identify Inacctive Users
+# Step 1: Identify Inactive Users
 def getInactiveUsers():
     all_users = gis.users.search(max_users=1000, sort_field='lastLogin', sort_order='desc')
     inactive_users = []
 
     for user in all_users:
         try:
-            if user.lastLogin  == 0:
-                last_login_date = datetime(1970, 1, 1) # Unix epoch
+            if user.lastLogin == 0:
+                last_login_date = datetime(1970, 1, 1)  # Unix epoch
                 last_login_str = "Never"
             else:
                 last_login_date = datetime.utcfromtimestamp(user.lastLogin / 1000)
@@ -53,14 +53,14 @@ def getInactiveUsers():
     df_inactive.to_csv(filename, index=False)
     print(f"Inactive users exported: {filename}")
     
-    return df_inactive["username"].tolist(), df_inactive
+    return df_inactive["Username"].tolist(), df_inactive
 
-# Step 2: Identify Unmodified Items
+# Step 2: Identify Flagged Content
 def getFlaggedContent(usernames):
     flagged_content = []
     for username in usernames:
         try:
-            user_content = gis.content.search(query = f"owner:{username} AND org_id:{ogr_id}", max_items = 100)
+            user_content = gis.content.search(query=f"owner:{username} AND orgid:{org_id}", max_items=100)
             for item in user_content:
                 modified_date = datetime.utcfromtimestamp(item.modified / 1000)
 
@@ -73,24 +73,24 @@ def getFlaggedContent(usernames):
                 is_unviewed = last_viewed_date < CUTOFF_VIEWED
 
                 if is_unmodified and is_unviewed:
-                    reason = "Unmodified and Unviewed"
+                    reason = "unmodified & unviewed"
                 elif is_unmodified:
-                    reason = "Unmodified"
+                    reason = "unmodified"
                 elif is_unviewed:
-                    reason = "Unviewed"
+                    reason = "unviewed"
                 else:
-                    continue
-            
-            flagged_content.append({
-                "Title": item.title,
-                "Owner": item.owner,
-                "Item Type": item.type,
-                "Item ID": item.id,
-                "Last Modified": modified_date.strftime('%Y-%m-%d'),
-                "Last Viewed": last_viewed_date.strftime('%Y-%m-%d'),
-                "URL": item.homepage if hasattr(item, 'homepage') else f"https://www.arcgis.com/home/item.html?id={item.id}",
-                "Reason": reason
-            })
+                    continue  # Skip items that don't match
+
+                flagged_content.append({
+                    "Title": item.title,
+                    "Owner": item.owner,
+                    "Item Type": item.type,
+                    "Item ID": item.id,
+                    "Last Modified": modified_date.strftime('%Y-%m-%d'),
+                    "Last Viewed": last_viewed_date.strftime('%Y-%m-%d'),
+                    "URL": item.homepage if hasattr(item, 'homepage') else f"https://www.arcgis.com/home/item.html?id={item.id}",
+                    "Reason": reason
+                })
         except Exception as e:
             print(f"Error processing content for user {username}: {e}")
 
@@ -100,7 +100,7 @@ def getFlaggedContent(usernames):
         df_flagged["Last Viewed"] = pd.to_datetime(df_flagged["Last Viewed"])
         df_flagged.sort_values(by="Last Modified", inplace=True)
 
-        filename = f"flagged_items_inactive_unmodified_unviewed_{TIMESTAMP}.csv"
+        filename = f"flagged_items_{TIMESTAMP}.csv"
         df_flagged.to_csv(filename, index=False)
         print(f"Flagged content exported: {filename}")
     return df_flagged
@@ -132,7 +132,7 @@ def generate_report(df_inactive, df_flagged, df_removed):
 
     if not df_flagged.empty:
         report_lines.append("\nFlagged Content:")
-        preview = df_removed.head(10)
+        preview = (df_removed if not df_removed.empty else df_flagged).head(10)
         for _, row in preview.iterrows():
             report_lines.append(
                 f"- {row.get('Title', 'N/A')} ({row.get('Item ID', 'N/A')}) "
@@ -155,19 +155,19 @@ df_flagged = getFlaggedContent(inactive_usernames)
 if df_flagged.empty:
     print("No flagged content found.")
 else:
-    print(f"len(df_flagged) itemes flagged for potential removal.")
+    print(f"{len(df_flagged)} items flagged for potential removal.")
     print("Options:")
-    print("Type 'Report'  → Generate a report of flagged items")
-    print("Type 'Cancel'  → Exit without removing anything")
-    print("Type 'Confirm' → Proceed to removal of flagged items")
+    print("Type 'report'  → Generate a report of flagged items")
+    print("Type 'cancel'  → Exit without removing anything")
+    print("Type 'confirm' → Proceed to removal of flagged items")
 
-    choice  = input("Enter your choice: ").strip().lower()
+    choice = input("Enter your choice: ").strip().lower()
 
-    if choice == "Report":
+    if choice == "report":
         generate_report(df_inactive, df_flagged, pd.DataFrame())
-    elif choice == "Cancel":
+    elif choice == "cancel":
         print("Exiting without changes.")
-    elif choice == "Confirm":
+    elif choice == "confirm":
         confirm = input("Are you sure you want to remove flagged items? (yes/no): ").strip().lower()
         if confirm == "yes":
             df_removed = remove_flagged_content(df_flagged)
