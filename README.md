@@ -48,6 +48,10 @@ The project processed one thousand user accounts and focused the analysis on ite
 
 Implementing a modular script for the project separated each task into different functions. Separating tasks made troubleshooting easier, kept things organized, and allowed for future improvements.
 
+### Flowchart
+
+![Flowchart for Project](images/Project_Flowchart.jpg)
+
 ### Connection and Authentication
 
 The script used the `GIS()` function to securely connect to ArcGIS Online and verify administrative permissions at login. Then, the script used the getpass module to retrieve user credentials and avoid securely hardcoding sensitive information.
@@ -81,10 +85,6 @@ After flagging content, the script used `input()` prompts to guide the following
 
 Because of constraints, the project did not remove any content. Instead, the script generated a detailed report of potentially removable content for review.
 
-### Flowchart
-
-![Flowchart for Project](images/Project_Flowchart.jpg)
-
 # Results
 
 ### Script Results
@@ -97,10 +97,9 @@ Because of constraints, the project did not remove any content. Instead, the scr
 
 ```csv
 Username,Full Name,Email,Last Login
-eb_buruca,Enrique Buruca,eb_buruca@tamu.edu,2017-04-19
-jdoe,John Doe,jdoe@example.com,Never
-asmith,Alice Smith,asmith@example.com,2016-10-01
-...
+22SummerPreview,22 Summer Preview,22SummerPreview@tamu.edu,2018-07-19
+AJohnson,Adam Johnson,ajohnson@tamu.edu,2020-09-12
+AJS_SummerCamp,AJS Summer Camp,ajs_summercamp@tamu.edu,2017-05-06
 ```
 
 [Download Full Inactive Users Report](inactive_users_20250428_093554.csv)
@@ -111,9 +110,9 @@ asmith,Alice Smith,asmith@example.com,2016-10-01
 
 ```csv
 Title,Owner,Last Modified,Last Viewed,Sharing Status,Item URL
-Old Basemap,eb_buruca,2015-06-22,2022-05-15,Organization,https://...
-Survey Layer,asmith,2014-03-14,N/A,Organization,https://...
-...
+Brazos County Aerial Image 1936,acm3392_bao,2016-12-16,2025-03-14,Organization,https://www.arcgis.com/home/item.html?id=44a06dfcd43b4f148e383dbcbac38e01
+Brazos County Aerial Image 1936,acm3392_bao,2016-12-20,2025-01-27,Organization,https://www.arcgis.com/home/item.html?id=7584b95c6f2b41a199497371c8fae07a
+raster_tile,acm3392_bao,2016-12-22,2025-04-24,Organization,https://www.arcgis.com/home/item.html?id=e1460283787b4b038156e61895507b5c
 ```
 
 [Download Full Flagged Items Report](flagged_items_20250428_093554.csv)
@@ -123,11 +122,18 @@ Survey Layer,asmith,2014-03-14,N/A,Organization,https://...
 ### Sample of Cleanup Report
 
 ```plaintext
-Username, Full Name, Email, Last Login
-eb_buruca, Enrique Buruca, eb_buruca@tamu.edu, 2017-04-19
-jdoe, John Doe, jdoe@example.com, Never
-asmith, Alice Smith, asmith@example.com, 2016-10-01
-...
+GIS Cleanup Report - 2025-04-28 09:37:12
+Executor: eb_buruca@tamu.edu_tamu
+Organization: Texas A&M University
+
+Summary:
+Total Inactive Users: 281
+Total Flagged Content: 128
+Total Removed Items: 0
+
+Flagged Content:
+- Brazos County Aerial Image 1936 (44a06dfcd43b4f148e383dbcbac38e01) by acm3392_bao | Last Modified: 2016-12-16 00:00:00 | Last Viewed: 2025-03-14 00:00:00
+- Brazos County Aerial Image 1936 (7584b95c6f2b41a199497371c8fae07a) by acm3392_bao | Last Modified: 2016-12-20 00:00:00 | Last Viewed: 2025-01-27 00:00:00
 ```
 
 [Download Full Cleanup Report](cleanup_report_20250428_093554.txt)
