@@ -1,0 +1,20 @@
+GIS Cleanup Report - 2025-04-28 09:37:12
+Executor: eb_buruca@tamu.edu_tamu
+Organization: Texas A&M University
+
+Summary:
+Total Inactive Users: 281
+Total Flagged Content: 128
+Total Removed Items: 0
+
+Flagged Content:
+- Brazos County Aerial Image 1936 (44a06dfcd43b4f148e383dbcbac38e01) by acm3392_bao | Last Modified: 2016-12-16 00:00:00 | Last Viewed: 2025-03-14 00:00:00
+- Brazos County Aerial Image 1936 (7584b95c6f2b41a199497371c8fae07a) by acm3392_bao | Last Modified: 2016-12-20 00:00:00 | Last Viewed: 2025-01-27 00:00:00
+- raster_tile (e1460283787b4b038156e61895507b5c) by acm3392_bao | Last Modified: 2016-12-22 00:00:00 | Last Viewed: 2025-04-24 00:00:00
+- raster_tile (8da2bdcf8d8e4a9bbe837e0d5c9fd5cf) by acm3392_bao | Last Modified: 2016-12-22 00:00:00 | Last Viewed: 2025-01-21 00:00:00
+- raster_tile (fa715e6d9c9845649973fde61f68b6c8) by acm3392_bao | Last Modified: 2017-01-20 00:00:00 | Last Viewed: 2025-04-26 00:00:00
+- 1945 Campus (e057dbe4297e4a2a81840f5b90473208) by acm3392_bao | Last Modified: 2017-01-23 00:00:00 | Last Viewed: 2024-11-22 00:00:00
+- Base2004 (e8b19841a11146a284dda3cfa1f1c0a7) by acm3392_bao | Last Modified: 2017-02-02 00:00:00 | Last Viewed: 1969-12-31 00:00:00
+- 40_clb5_45 (8be41d36b82748eba9e54ca68faad8bb) by acm3392_bao | Last Modified: 2017-02-23 00:00:00 | Last Viewed: 1969-12-31 00:00:00
+- Airports (57ba57506a2b41459b04602e5d210c12) by acm3392_bao | Last Modified: 2017-03-06 00:00:00 | Last Viewed: 2025-04-28 00:00:00
+- Campus_boundary (c7708b08e61845b192d47867058ba40b) by acm3392_bao | Last Modified: 2017-03-22 00:00:00 | Last Viewed: 2025-04-28 00:00:00
